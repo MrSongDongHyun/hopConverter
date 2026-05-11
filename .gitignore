@@ -1,0 +1,11 @@
+node_modules/
+samples/
+dist/
+*.pdf
+*.txt
+*.md
+!README.md
+.env
+.claude/
+__pycache__/
+*.pyc
