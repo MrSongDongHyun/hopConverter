@@ -1,19 +1,18 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "hop-converter"
 version = "1.0.0"
 description = "HWP/HWPX to PDF/Text/Markdown converter (Windows x64, no Node.js required)"
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
 requires-python = ">=3.10"
 keywords = ["hwp", "hwpx", "pdf", "converter", "한글"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: Microsoft :: Windows",
-    "License :: OSI Approved :: MIT License",
 ]
 
 [tool.setuptools.packages.find]
