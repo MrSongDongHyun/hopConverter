@@ -1,19 +1,32 @@
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
 import { dirname, join } from 'path';
-import { createCanvas } from 'canvas';
 
 const require = createRequire(import.meta.url);
 
 let initPromise = null;
 
 function registerMeasureTextWidth() {
-  let canvasCtx = null;
-  let lastFont = '';
   globalThis.measureTextWidth = (font, text) => {
-    if (!canvasCtx) canvasCtx = createCanvas(1, 1).getContext('2d');
-    if (font !== lastFont) { canvasCtx.font = font; lastFont = font; }
-    return canvasCtx.measureText(text).width;
+    const sizeMatch = font.match(/(\d+(?:\.\d+)?)(px|pt)/);
+    const size = sizeMatch ? parseFloat(sizeMatch[1]) : 12;
+    let width = 0;
+    for (const char of text) {
+      const cp = char.codePointAt(0);
+      if (
+        (cp >= 0xAC00 && cp <= 0xD7A3) ||  // 한글 완성형
+        (cp >= 0x4E00 && cp <= 0x9FFF) ||  // CJK 통합 한자
+        (cp >= 0x3000 && cp <= 0x303F) ||  // CJK 기호
+        (cp >= 0xFF00 && cp <= 0xFFEF)     // 전각 ASCII
+      ) {
+        width += size;
+      } else if (cp >= 0x0020 && cp <= 0x007E) {
+        width += size * 0.55;
+      } else {
+        width += size * 0.7;
+      }
+    }
+    return width;
   };
 }
 
